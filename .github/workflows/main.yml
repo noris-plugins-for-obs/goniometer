@@ -79,6 +79,25 @@ jobs:
           fi
           ls /usr/share/obs/obs-plugins/${PLUGIN_NAME}/
 
+      - name: 'Setup with onsdriver'
+        uses: noris-plugins-for-obs/onsdriver@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          first-time-log: ./logs/
+
+      - name: 'Test with onsdriver'
+        run: |
+          python -m unittest discover test-onsdriver/
+
+      - name: 'Upload logs of onsdriver'
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-${{ env.artifactName }}-linux-obs${{ matrix.obs }}-${{ matrix.ubuntu }}
+          path: |
+            logs/*
+
   macos_build:
     runs-on: macos-14
     strategy:
@@ -216,6 +235,26 @@ jobs:
           name: ${{ env.artifactName }}-macos-obs${{ matrix.obs }}-${{ matrix.arch }}
           path: package/*
 
+      - name: 'Setup with onsdriver'
+        uses: noris-plugins-for-obs/onsdriver@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          obs-plugins: package/*.pkg
+          first-time-log: ./logs/
+
+      - name: 'Test with onsdriver'
+        run: |
+          python -m unittest discover test-onsdriver/
+
+      - name: 'Upload logs of onsdriver'
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-${{ env.artifactName }}-macos-obs${{ matrix.obs }}-${{ matrix.arch }}
+          path: |
+            logs/*
+
   windows_build:
     runs-on: windows-2022
     strategy:
@@ -256,3 +295,23 @@ jobs:
         with:
           name: ${{ env.artifactName }}-windows-obs${{ matrix.obs }}-${{ matrix.arch }}
           path: package/*
+
+      - name: 'Setup with onsdriver'
+        uses: noris-plugins-for-obs/onsdriver@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          obs-plugins: package/*.exe
+          first-time-log: ./logs/
+
+      - name: 'Test with onsdriver'
+        run: |
+          python -m unittest discover test-onsdriver/
+
+      - name: 'Upload logs of onsdriver'
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-${{ env.artifactName }}-windows-obs${{ matrix.obs }}-${{ matrix.arch }}
+          path: |
+            logs/*
