@@ -62,6 +62,7 @@ jobs:
           make -j4
           make package
           echo "FILE_NAME=$(find $PWD -name '*.deb' | head -n 1)" >> $GITHUB_ENV
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -263,12 +264,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
       - name: Download obs-studio
         id: obsdeps
         uses: norihiro/obs-studio-devel-action@v2
         with:
           obs: ${{ matrix.obs }}
           qt: ${{ env.qt }}
+
       - name: Build plugin
         run: |
           $CmakeArgs = @(
@@ -278,8 +281,10 @@ jobs:
           cmake -S . -B build ${{ steps.obsdeps.outputs.PLUGIN_CMAKE_OPTIONS_PS }} @CmakeArgs
           cmake --build build --config RelWithDebInfo -j 4
           cmake --install build --config RelWithDebInfo --prefix "$(Resolve-Path -Path .)/release"
+
       - name: Package plugin
         run: ci/windows/package-windows.cmd ${{ matrix.obs }}
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
