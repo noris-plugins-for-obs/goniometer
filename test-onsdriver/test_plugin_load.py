@@ -5,7 +5,7 @@ Test plugin is loaded
 import unittest
 from onsdriver import obstest
 
-PLUGIN_NAME = 'simple-plugin-template'
+PLUGIN_NAME = 'goniometer'
 
 
 class PluginLoadTest(obstest.OBSTest):

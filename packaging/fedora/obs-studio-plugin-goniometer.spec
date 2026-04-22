@@ -1,7 +1,7 @@
-Name: obs-studio-plugin-simple-template
+Name: obs-studio-plugin-goniometer
 Version: @VERSION@
 Release: @RELEASE@%{?dist}
-Summary: simple template plugin for OBS Studio
+Summary: plugin to display audio goniometer on OBS Studio
 License: GPLv2+
 
 Source0: %{name}-%{version}.tar.bz2
@@ -10,7 +10,9 @@ BuildRequires: obs-studio-devel
 BuildRequires: qt6-qtbase-devel qt6-qtbase-private-devel
 
 %description
-Template plugin to demonstrate build flow.
+This plugin provides a goniometer on OBS Studio, which is a visual
+representation of the stereo relationship between the left and the right
+channels of the audio signal.
 
 %prep
 %autosetup -p1

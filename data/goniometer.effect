@@ -1,0 +1,38 @@
+uniform float4x4 ViewProj;
+uniform texture2d image;
+
+sampler_state def_sampler {
+	Filter   = Linear;
+	AddressU = Border;
+	AddressV = Border;
+	BorderColor = 00000000;
+};
+
+struct VertInOut {
+	float4 pos : POSITION;
+	float2 uv  : TEXCOORD0;
+};
+
+VertInOut VSDefault(VertInOut vert_in)
+{
+	VertInOut vert_out;
+	vert_out.pos = mul(float4(vert_in.pos.xyz, 1.0), ViewProj);
+	vert_out.uv.x = vert_in.uv.x;
+	vert_out.uv.y = 1.0 - vert_in.uv.y;
+	return vert_out;
+}
+
+float4 PSDraw(VertInOut vert_in) : TARGET
+{
+	float r = image.Sample(def_sampler, vert_in.uv).x;
+	return float4(r, r, r, 1.0);
+}
+
+technique Draw
+{
+	pass
+	{
+		vertex_shader = VSDefault(vert_in);
+		pixel_shader  = PSDraw(vert_in);
+	}
+}

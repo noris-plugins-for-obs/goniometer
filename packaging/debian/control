@@ -1,4 +1,4 @@
-Source: simple-plugin-template
+Source: goniometer-plugin-for-obs
 Section: video
 Priority: optional
 Maintainer: Norihiro Kamae <norihiro-ppa-plugins-for-obs-studio@nagater.net>
@@ -11,10 +11,13 @@ Build-Depends:
  qt6-base-dev, qt6-base-private-dev, libqt6svg6-dev, qt6-wayland,
  libxcb1-dev, libx11-xcb-dev, libwayland-dev, libglvnd-dev
 Standards-Version: 4.6.0
-Homepage: https://github.com/noris-plugins-for-obs/simple-plugin-template
+Homepage: https://github.com/noris-plugins-for-obs/goniometer
 
-Package: simple-plugin-template-for-obs
+Package: goniometer-plugin-for-obs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: template plugin plugin for OBS Studio
-
+Description: plugin to display audio goniometer on OBS Studio
+ This plugin provides a goniometer on OBS Studio, which is a visual
+ representation of the stereo relationship between the left and the right
+ channels of the audio signal.
+ .

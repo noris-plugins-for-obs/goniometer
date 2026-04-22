@@ -1,6 +1,6 @@
 /*
-Plugin Template for OBS Studio
-Copyright (C) 2025 Norihiro Kamae
+Goniometer Plugin for OBS Studio
+Copyright (C) 2026 Norihiro Kamae
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,9 +24,25 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
+extern const struct obs_source_info goniometer_source_info;
+
 const char *obs_module_name(void)
 {
 	return obs_module_text("Module.Name");
+}
+
+static bool register_source_with_flags(const struct obs_source_info *const_info, uint32_t flags)
+{
+	struct obs_source_info info = *const_info;
+	info.output_flags |= flags;
+	obs_register_source(&info);
+
+	if (!obs_get_latest_input_type_id(info.id)) {
+		blog(LOG_ERROR, "failed to load source '%s'", info.id);
+		return false;
+	}
+
+	return true;
 }
 
 bool obs_module_load(void)
@@ -39,6 +55,9 @@ bool obs_module_load(void)
 	}
 
 	/* TODO: Register your source-types, output-types, etc. here. */
+
+	if (!register_source_with_flags(&goniometer_source_info, 0))
+		return false;
 
 	blog(LOG_INFO, "plugin loaded (plugin version %s, API version %d.%d.%d)", PLUGIN_VERSION, LIBOBS_API_MAJOR_VER,
 	     LIBOBS_API_MINOR_VER, LIBOBS_API_PATCH_VER);

@@ -1,4 +1,4 @@
-simple-plugin-template (%VERSION%-%RELEASE%~%DISTRIBUTION%) %DISTRIBUTION%; urgency=medium
+goniometer-plugin-for-obs (%VERSION%-%RELEASE%~%DISTRIBUTION%) %DISTRIBUTION%; urgency=medium
 
   * Initial release
 

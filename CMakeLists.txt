@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(simple-plugin-template VERSION 0.1.0) # TODO: Set for each plugin
+project(goniometer VERSION 0.1.0)
 
 set(PLUGIN_AUTHOR "Norihiro Kamae")
 
-set(PLUGIN_URL "https://www.example.com/") # TODO: Set for each plugin
-set(ID_PREFIX "net.nagater.obs.simple-plugin-template.") # TODO: Set for each plugin
-set(MACOS_BUNDLEID "net.nagater.obs.simple-plugin-template") # TODO: Set for each plugin
-set(MACOS_PACKAGE_UUID   "5D2F3BC5-7DD1-4108-920E-C89883D7236A") # TODO: Set for each plugin
-set(MACOS_INSTALLER_UUID "78EE49EB-58F1-48D5-BA34-8D026C3DF918") # TODO: Set for each plugin
-set(WIN_INSTALLER_UUID   "3A43C590-587D-4F22-8D2B-514F89C4A378") # TODO: Set for each plugin
+set(PLUGIN_URL "https://github.com/noris-plugins-for-obs/goniometer")
+set(ID_PREFIX "net.nagater.obs.goniometer.")
+set(MACOS_BUNDLEID "net.nagater.obs.goniometer")
+set(MACOS_PACKAGE_UUID   "46BEB371-5877-40EC-94DD-1AD6772A5B17")
+set(MACOS_INSTALLER_UUID "09CA8CFD-20F0-46E7-8FC5-52004104AB4B")
+set(WIN_INSTALLER_UUID   "E2718622-06FA-4E6E-BA85-CA60428CD2C4")
 
 set(LINUX_MAINTAINER_EMAIL "norihiro@nagater.net")
 
@@ -38,6 +38,8 @@ configure_file(
 
 set(PLUGIN_SOURCES
 	src/plugin-main.c
+	src/goniometer.c
+	src/util.c
 )
 
 add_library(${PROJECT_NAME} MODULE ${PLUGIN_SOURCES})
