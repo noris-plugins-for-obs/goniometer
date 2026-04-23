@@ -47,6 +47,7 @@ static const char *goniometer_get_name(void *unused)
 
 static void *goniometer_create(obs_data_t *settings, obs_source_t *source)
 {
+	UNUSED_PARAMETER(source);
 	struct goniometer_source *src = bzalloc(sizeof(struct goniometer_source));
 
 	src->buf = bzalloc(TEX_SIZE * TEX_SIZE);
@@ -128,6 +129,7 @@ static inline int float_to_int(float x)
 
 void audio_cb(void *param, size_t mix_idx, struct audio_data *data)
 {
+	UNUSED_PARAMETER(mix_idx);
 	struct goniometer_source *src = param;
 
 	const float **data_in = (const float **)data->data;
