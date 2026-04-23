@@ -36,7 +36,7 @@ struct goniometer_source
 	int track;
 };
 
-static void goniometer_update(void *data, obs_data_t *settings);
+static void goniometer_update_internal(struct goniometer_source *src, obs_data_t *settings);
 void audio_cb(void *param, size_t mix_idx, struct audio_data *data);
 
 static const char *goniometer_get_name(void *unused)
@@ -60,7 +60,7 @@ static void *goniometer_create(obs_data_t *settings, obs_source_t *source)
 		blog(LOG_ERROR, "Failed to load effect file");
 	}
 
-	goniometer_update(src, settings);
+	goniometer_update_internal(src, settings);
 
 	return src;
 }
@@ -83,8 +83,12 @@ static void goniometer_destroy(void *data)
 
 static void goniometer_update(void *data, obs_data_t *settings)
 {
-	struct goniometer_source *src = data;
+	ASSERT_THREAD(OBS_TASK_GRAPHICS);
+	goniometer_update_internal(data, settings);
+}
 
+static void goniometer_update_internal(struct goniometer_source *src, obs_data_t *settings)
+{
 	int track = (int)obs_data_get_int(settings, "track") - 1;
 	if (src->track != track && valid_track(track)) {
 		if (valid_track(src->track))

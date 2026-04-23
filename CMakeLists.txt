@@ -14,6 +14,7 @@ set(WIN_INSTALLER_UUID   "E2718622-06FA-4E6E-BA85-CA60428CD2C4")
 set(LINUX_MAINTAINER_EMAIL "norihiro@nagater.net")
 
 option(ENABLE_COVERAGE "Enable coverage option for GCC" OFF)
+option(WITH_ASSERT_THREAD "Enable thread assertion" OFF)
 
 set(CMAKE_PREFIX_PATH "${QTDIR}")
 set(CMAKE_AUTOMOC ON)
