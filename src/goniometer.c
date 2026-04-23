@@ -150,13 +150,13 @@ void audio_cb(void *param, size_t mix_idx, struct audio_data *data)
 static uint32_t goniometer_get_width(void *data)
 {
 	UNUSED_PARAMETER(data);
-	return 256;
+	return TEX_SIZE;
 }
 
 static uint32_t goniometer_get_height(void *data)
 {
 	UNUSED_PARAMETER(data);
-	return 256;
+	return TEX_SIZE;
 }
 
 static void set_image(struct goniometer_source *src, const uint8_t *buf)
