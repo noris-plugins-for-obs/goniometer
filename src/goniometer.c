@@ -56,6 +56,9 @@ static void *goniometer_create(obs_data_t *settings, obs_source_t *source)
 	obs_enter_graphics();
 	src->effect = create_effect_from_module_file("goniometer.effect");
 	obs_leave_graphics();
+	if (!src->effect) {
+		blog(LOG_ERROR, "Failed to load effect file");
+	}
 
 	goniometer_update(src, settings);
 
@@ -179,14 +182,6 @@ static void goniometer_render(void *data, gs_effect_t *unused_effect)
 	struct goniometer_source *src = data;
 	UNUSED_PARAMETER(unused_effect);
 
-	if (!src->effect) {
-		blog(LOG_WARNING, "Effect was not loaded");
-		return;
-	}
-	if (!src->tex) {
-		blog(LOG_WARNING, "Texture was not created");
-		return;
-	}
 	if (!src->effect || !src->tex)
 		return;
 
