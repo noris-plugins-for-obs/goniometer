@@ -5,6 +5,7 @@ Summary: plugin to display audio goniometer on OBS Studio
 License: GPLv2+
 
 Source0: %{name}-%{version}.tar.bz2
+Source1: @submodule:noriscommonui@
 BuildRequires: cmake, gcc, gcc-c++
 BuildRequires: obs-studio-devel
 BuildRequires: qt6-qtbase-devel qt6-qtbase-private-devel
@@ -16,6 +17,7 @@ channels of the audio signal.
 
 %prep
 %autosetup -p1
+tar -xjf %{SOURCE1}
 
 %build
 %{cmake} -DQT_VERSION=6 -DINSTALL_LICENSE_FILES:BOOL=OFF

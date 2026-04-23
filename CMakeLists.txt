@@ -15,6 +15,7 @@ set(LINUX_MAINTAINER_EMAIL "norihiro@nagater.net")
 
 option(ENABLE_COVERAGE "Enable coverage option for GCC" OFF)
 option(WITH_ASSERT_THREAD "Enable thread assertion" OFF)
+option(NORISCOMMONUI_SUBMODULE "Use noriscommonui from submodule" ON)
 
 set(CMAKE_PREFIX_PATH "${QTDIR}")
 set(CMAKE_AUTOMOC ON)
@@ -30,6 +31,13 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
 	add_library(OBS::frontend-api ALIAS OBS::obs-frontend-api)
 	set(QT_NO_CREATE_VERSIONLESS_TARGETS OFF)
 	find_package(Qt${QT_VERSION} COMPONENTS Widgets Core Gui)
+endif()
+
+if(NORISCOMMONUI_SUBMODULE)
+	add_subdirectory(noriscommonui)
+	add_library(noriscommonui::noriscommonui ALIAS noriscommonui)
+else()
+	find_package(NorisCommonUI REQUIRED)
 endif()
 
 configure_file(
@@ -51,6 +59,7 @@ target_link_libraries(${PROJECT_NAME}
 	Qt::Core
 	Qt::Widgets
 	Qt::Gui
+	noriscommonui::noriscommonui
 )
 
 target_include_directories(${PROJECT_NAME}
