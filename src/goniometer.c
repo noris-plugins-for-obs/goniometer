@@ -31,6 +31,9 @@ struct goniometer_source
 
 	gs_effect_t *effect;
 	gs_texture_t *tex;
+
+	// properties
+	int track;
 };
 
 static void goniometer_update(void *data, obs_data_t *settings);
@@ -47,6 +50,7 @@ static void *goniometer_create(obs_data_t *settings, obs_source_t *source)
 	struct goniometer_source *src = bzalloc(sizeof(struct goniometer_source));
 
 	src->buf = bzalloc(TEX_SIZE * TEX_SIZE);
+	src->track = -1;
 	pthread_mutex_init(&src->buf_mutex, NULL);
 
 	obs_enter_graphics();
@@ -55,8 +59,6 @@ static void *goniometer_create(obs_data_t *settings, obs_source_t *source)
 
 	goniometer_update(src, settings);
 
-	obs_add_raw_audio_callback(0, NULL, audio_cb, src);
-
 	return src;
 }
 
@@ -64,7 +66,8 @@ static void goniometer_destroy(void *data)
 {
 	struct goniometer_source *src = data;
 
-	obs_remove_raw_audio_callback(0, audio_cb, src);
+	if (valid_track(src->track))
+		obs_remove_raw_audio_callback(src->track, audio_cb, src);
 
 	obs_enter_graphics();
 	gs_texture_destroy(src->tex);
@@ -78,8 +81,14 @@ static void goniometer_destroy(void *data)
 static void goniometer_update(void *data, obs_data_t *settings)
 {
 	struct goniometer_source *src = data;
-	UNUSED_PARAMETER(src);
-	UNUSED_PARAMETER(settings);
+
+	int track = (int)obs_data_get_int(settings, "track") - 1;
+	if (src->track != track && valid_track(track)) {
+		if (valid_track(src->track))
+			obs_remove_raw_audio_callback(src->track, audio_cb, src);
+		obs_add_raw_audio_callback(track, NULL, audio_cb, src);
+		src->track = track;
+	}
 }
 
 static obs_properties_t *goniometer_get_properties(void *data)
@@ -89,7 +98,14 @@ static obs_properties_t *goniometer_get_properties(void *data)
 
 	obs_properties_t *props = obs_properties_create();
 
+	obs_properties_add_int(props, "track", obs_module_text("Props.Track"), 1, MAX_AUDIO_MIXES, 1);
+
 	return props;
+}
+
+static void goniometer_get_defaults(obs_data_t *settings)
+{
+	obs_data_set_default_int(settings, "track", 1);
 }
 
 static inline int float_to_int(float x)
@@ -191,6 +207,7 @@ const struct obs_source_info goniometer_source_info = {
 	.destroy = goniometer_destroy,
 	.update = goniometer_update,
 	.get_properties = goniometer_get_properties,
+	.get_defaults = goniometer_get_defaults,
 	.get_width = goniometer_get_width,
 	.get_height = goniometer_get_height,
 	.video_tick = goniometer_tick,
