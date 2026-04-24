@@ -49,6 +49,7 @@ set(PLUGIN_SOURCES
 	src/plugin-main.c
 	src/goniometer.c
 	src/util.c
+	src/goniometer-dock.cpp
 )
 
 add_library(${PROJECT_NAME} MODULE ${PLUGIN_SOURCES})

@@ -17,9 +17,11 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
 #include <obs-module.h>
+#include <obs-frontend-api.h>
 #include <stdlib.h>
 
 #include "plugin-macros.generated.h"
+#include "goniometer.h"
 
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
@@ -62,4 +64,9 @@ bool obs_module_load(void)
 	blog(LOG_INFO, "plugin loaded (plugin version %s, API version %d.%d.%d)", PLUGIN_VERSION, LIBOBS_API_MAJOR_VER,
 	     LIBOBS_API_MINOR_VER, LIBOBS_API_PATCH_VER);
 	return true;
+}
+
+void obs_module_post_load(void)
+{
+	obs_frontend_add_dock_by_id(ID_PREFIX "dock", obs_module_text("GoniometerDock.Name"), create_goniometer_dock());
 }
