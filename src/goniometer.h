@@ -1,5 +1,7 @@
 #pragma once
 
+#define SAVE_DATA_NAME ID_PREFIX "dock"
+
 #ifdef __cplusplus
 extern "C" {
 class QWidget;
