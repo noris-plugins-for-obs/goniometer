@@ -91,6 +91,7 @@ static void goniometer_update(void *data, obs_data_t *settings)
 static void goniometer_update_internal(struct goniometer_source *src, obs_data_t *settings)
 {
 	int track = (int)obs_data_get_int(settings, "track") - 1;
+	/* If an invalid "track" comes, let's just ignore and use the old track. */
 	if (src->track != track && valid_track(track)) {
 		if (valid_track(src->track))
 			obs_remove_raw_audio_callback(src->track, audio_cb, src);
@@ -116,7 +117,7 @@ static void goniometer_get_defaults(obs_data_t *settings)
 	obs_data_set_default_int(settings, "track", 1);
 }
 
-static inline int float_to_int(float x)
+static inline int float_to_u8(float x)
 {
 	if (-1.0 <= x && x <= 1.0f)
 		return (int)((x + 1.0f) * (TEX_SIZE - 1) / 2);
@@ -140,8 +141,8 @@ void audio_cb(void *param, size_t mix_idx, struct audio_data *data)
 	for (uint32_t iframe = 0; iframe < data->frames; iframe++) {
 		float l_flt = data_in[0][iframe];
 		float r_flt = data_in[1][iframe];
-		int x_int = float_to_int((r_flt - l_flt) * 0.5f);
-		int y_int = float_to_int((l_flt + r_flt) * 0.5f);
+		int x_int = float_to_u8((r_flt - l_flt) * 0.5f);
+		int y_int = float_to_u8((l_flt + r_flt) * 0.5f);
 		src->buf[x_int + y_int * TEX_SIZE] = 255;
 	}
 	pthread_mutex_unlock(&src->buf_mutex);
